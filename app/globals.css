@@ -24,4 +24,26 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+    overflow: hidden;
+}
+
+.tech_stack {
+  
+}
+
+.tech_stack::-webkit-scrollbar {
+  width: 2px;
+  opacity: 0.4;
+}
+
+.tech_stack::-webkit-scrollbar-track {
+  width: 1px;
+  background: transparent;
+  border-bottom: 10px solid white;
+}
+
+.tech_stack::-webkit-scrollbar-thumb {
+  background: #FFF;
+  border-radius: 20px;
+
 }

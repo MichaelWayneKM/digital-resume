@@ -1,0 +1,40 @@
+.apple-watch {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  
+  .apple-watch-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    width: 3px;
+    background: #385742;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #FFF;
+    border-radius: 20px;
+  }
+  
+  @media (min-width: 768px) {
+    .apple-watch-border {
+      width: 70%;
+      height: 70%;
+    }
+  }
+  
