@@ -6,29 +6,40 @@ const inter = Inter({ subsets: ["latin"] });
 
 import Head from "next/head";
 import AppleWatchScroll from "@/components/AppleWatchScroll";
+import { motion, HTMLMotionProps } from "framer-motion";
 
 import { useTrail, animated } from "@react-spring/web";
 import { useRef, useState } from "react";
 import { useGesture } from "react-use-gesture";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faArrowRightArrowLeft,
+  faArrowTurnRight,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
 import StarRating from "@/components/StarRating";
+import { faArrowAltCircleRight } from "@fortawesome/free-regular-svg-icons";
 
 const skills = [
   { name: "JavaScript", skillRating: 5, imgSrc: "", imgAlt: "" },
   { name: "Python", skillRating: 4, imgSrc: "", imgAlt: "" },
   { name: "React", skillRating: 5, imgSrc: "", imgAlt: "" },
-  { name: "TypeScript", skillRating: 3, imgSrc: "", imgAlt: "" },
+  { name: "TypeScript", skillRating: 6, imgSrc: "", imgAlt: "" },
   { name: "Kotlin", skillRating: 2, imgSrc: "", imgAlt: "" },
   { name: "C", skillRating: 4, imgSrc: "", imgAlt: "" },
   { name: "Android", skillRating: 3, imgSrc: "", imgAlt: "" },
   { name: "Arduino", skillRating: 2, imgSrc: "", imgAlt: "" },
+  { name: "Dart", skillRating: 5, imgSrc: "", imgAlt: "" },
+  { name: "Flutter", skillRating: 5, imgSrc: "", imgAlt: "" },
 ];
 
-skills.forEach((skill) => {
-  skill.imgSrc = `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${skill.name.toLowerCase()}/${skill.name.toLowerCase()}-original.svg`;
-  skill.imgAlt = `${skill.name} logo`;
-});
+skills
+  .sort((A, B) => B.skillRating - A.skillRating)
+  .forEach((skill) => {
+    skill.imgSrc = `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${skill.name.toLowerCase()}/${skill.name.toLowerCase()}-original.svg`;
+    skill.imgAlt = `${skill.name} logo`;
+  });
 
 const SkillList = () => {
   const config = { mass: 5, tension: 2000, friction: 200 };
@@ -36,15 +47,15 @@ const SkillList = () => {
     config,
     opacity: 1,
     x: 0,
-    from: { opacity: 0, x: 20 },
+    from: { opacity: 0, x: 5 },
   });
 
   return (
-    <div className="flex items-center justify-center px-10 select-none">
+    <div className="flex items-center justify-center  sm:px-0 select-none">
       {trail.map(({ x, opacity }, index) => (
         <animated.div
           key={index}
-          className="flex items-center justify-center h-96 p-2"
+          className="flex items-center justify-center py-8 p-2"
           style={{
             opacity,
             transform: x.to((x) => `translate3d(0,${x}px,0)`),
@@ -65,15 +76,36 @@ const SkillList = () => {
                 .to((x) => `translate3d(0,${x}px,0)`),
             }}
           >
-            <StarRating rating={skills[index].skillRating} index={index}  />
-            
-            <img
-              draggable="false"
-              src={skills[index].imgSrc}
-              alt={skills[index].imgAlt}
-              className="mt-4 mb-2 w-30 h-30 select-none object-cover rounded-full border-4 border-white bg-white"
+            <StarRating
+              rating={skills[index].skillRating}
+              index={index}
+              delay={2 + 0.4 * index}
             />
-            <div className="text-slate-100 text-center">{skills[index].name}</div>
+
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1.1 }}
+              transition={{
+                type: "spring",
+                stiffness: 1000,
+                ease: "easeInOut",
+                duration: 0.4,
+                delay: 2 + 0.4 * index,
+              }}
+              draggable="false"
+              className="mt-4 mb-2 w-20 h-30 mx-auto select-none object-cover rounded-full border-4 border-black bg-black overflow-clip"
+            >
+              <Image
+                src={skills[index].imgSrc}
+                alt={skills[index].imgAlt}
+                height={80}
+                loading="lazy"
+                width={80}
+              ></Image>
+            </motion.div>
+            <div className="text-slate-900 font-extrabold text-center">
+              {skills[index].name}
+            </div>
           </animated.div>
         </animated.div>
       ))}
@@ -124,48 +156,115 @@ const SocialButtons = () => {
   );
 };
 
+const HeadingTile = () => {
+  return (
+    <div className="h-full">
+      <div className="text-white font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight mb-4">
+        <span className="block xl:inline">My </span>
+        <span className="block xl:inline transform -skew-x-12">Digital </span>
+        <span className="block xl:inline transform -skew-x-12">Portfolio </span>
+      </div>
+    </div>
+  );
+};
+
 export default function Home() {
   return (
     <AppleWatchScroll>
-      <Head>
-        <title>My Portfolio</title>
-        <script defer src="https://kit.fontawesome.com/7b306e9bdd.js" crossOrigin="anonymous"></script>
-      </Head>
-
-      <div className="relative h-96 overflow-hidden flex items-center min-w-full">
+      <div className="relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="bg-gradient-to-b from-gray-800 to-blue-500 h-full"></div>
         </div>
 
-        <div className="tech_stack relative z-10 touch-auto flex items-center overflow-scroll overflow-y-hidden flex-nowrap">
-          <div className="mr-4 sm:mr-6 lg:mr-80"></div>
-          <img
-            draggable="false"
-            src="https://avatars.githubusercontent.com/u/74700061?s=400&v=4"
-            alt="My photo"
-            className="w-72 h-72 object-cover rounded-full border-4 border-white"
+        <div className="absolute  sm:right-2 md:right-10 lg:right-10">
+          <Image
+            src="/wkds-ui-mobile-sprite.png"
+            alt="my mobile ui sprite"
+            height={800}
+            width={800}
+            style={{
+              opacity: 0.3,
+              minHeight: 420,
+              minWidth: 420,
+            }}
           />
+        </div>
 
-          <SkillList />
+        {/* All Heading components here */}
+        <div className="relative z-10 py-40 px-4 md:px-8 lg:px-20">
+          <HeadingTile />
         </div>
       </div>
 
-      <div className="bg-blue-500 py-8 md:py-12 lg:py-16">
+      <div className="bg-white py-8 md:py-12 lg:py-16">
+        <div className="skill-title relative tracking-tight font-extrabold z-20 mx-0 sm:mx-6 lg:mx-60 flex text-center text-slate-900 text-2xl rounded-full px-3 py-1">
+          My skills and expertise
+        </div>
+
+        <div className="relative overflow-hidden flex  items-center align-middle min-w-full">
+          <div className="absolute z-20 right-0 top-0 w-1/3 touch-none pointer-events-none bg-gradient-to-r from-transparent to-white h-full"></div>
+          <div className="relative tech_stack mx-0 sm:mx-6 lg:mx-60 z-10 touch-auto flex items-center overflow-scroll overflow-y-scroll flex-nowrap">
+            {/* <div className="mr-4 sm:mr-6 lg:mr-80"></div> */}
+
+            <SkillList />
+          </div>
+        </div>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, top: 100 }}
+        viewport={{ once: true }}
+        whileInView={{ opacity: 1, top: 0 }}
+        transition={{ duration: 1, delay: 0.2, ease: "easeInOut" }}
+        className="relative bg-slate-900 py-8 md:py-12 lg:py-16"
+      >
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-white font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight mb-4">
-            <span className="block xl:inline">Michael</span>
+          <motion.img
+            initial={{ opacity: 0, marginBottom: 150 }}
+            whileInView={{ opacity: 1, marginBottom: 16 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 1, ease: "easeInOut" }}
+            draggable="false"
+            src="https://avatars.githubusercontent.com/u/74700061?s=400&v=4"
+            alt="My photo"
+            className="w-32 h-32 my-4 object-cover rounded-full border-2 border-white"
+          />
+          <motion.div
+            initial={{ opacity: 0, marginBottom: 50 }}
+            whileInView={{ opacity: 1, marginBottom: 16 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 1.2, ease: "easeInOut" }}
+            className="text-white font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight mb-4"
+          >
+            <span className="block xl:inline">Michael </span>
             <span className="block xl:inline transform -skew-x-12">Wayne</span>
-          </div>
-          <div className="text-white font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-tight mb-4">
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, marginBottom: 50 }}
+            whileInView={{ opacity: 1, marginBottom: 16 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 1.4, ease: "easeInOut" }}
+            className="text-white font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-tight mb-4"
+          >
             Software engineer
-          </div>
-          <div className="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl">
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, marginBottom: 50 }}
+            whileInView={{ opacity: 1, marginBottom: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 1.6, ease: "easeInOut" }}
+            className="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl"
+          >
             <p>
               Crafting scalable solutions through clean code and innovative
               problem-solving.
             </p>
-          </div>
+          </motion.div>
         </div>
+      </motion.div>
+
+      <div className="max-w-5xl mx-auto my-10 px-4 sm:px-6 lg:px-8 py-12 md:py-16 rounded-md bg-slate-50">
+        <div className="text-5xl text-slate-900">Project History</div>
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">

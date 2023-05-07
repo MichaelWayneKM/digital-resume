@@ -1,11 +1,10 @@
 import Head from "next/head";
-import "./globals.css";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Dev Portfolio | Michael W.",
+  title: "Project",
   description:
     'My portfolio as "Michael wayne" where i showcase my skills and ability through demonstrations.',
 };
