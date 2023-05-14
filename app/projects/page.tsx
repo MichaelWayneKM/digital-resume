@@ -15,7 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSuperpowers } from "@fortawesome/free-brands-svg-icons";
-import { Breadcrumbs, Button, Skeleton, Typography } from "@mui/material";
+import { Breadcrumbs, Skeleton, Typography } from "@mui/material";
 import { generateCoolQueryParams } from "@/utils/cool";
 import { Spinner } from "@/components/Spinner";
 import {
@@ -23,7 +23,6 @@ import {
   ProjectCardSkeleton,
   ProjectFormCardProps,
 } from "@/components/ProjectCard";
-import useScrollToAnchor from "../hooks/useScrollToAnchor";
 
 const PageHeader = () => {
   return (
@@ -40,7 +39,7 @@ const PageHeader = () => {
 const ProjectShimmer = () => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     {[...Array(9)].map((_, index) => (
-      <ProjectCardSkeleton />
+      <ProjectCardSkeleton key={index}/>
     ))}
   </div>
 );
@@ -63,13 +62,9 @@ const ProjectsComponent = () => {
   );
 };
 
-const ProjectsPage = () => {
+const ProjectsPage = async () => {
   
-  const scrollToAnchor = useScrollToAnchor(42);
-
-	const makeActive = (link: string) => {
-	  scrollToAnchor(link);
-	};
+  
 
   return (
     <AppleWatchScroll>
@@ -80,9 +75,9 @@ const ProjectsPage = () => {
             <Link color="inherit" href="/">
               landing
             </Link>
-            <Button onClick={() => makeActive("/#projects")}>
+            <Link color="inherit" href="/#projects" scroll={false}>
               projects
-            </Button>
+            </Link>
             <Typography color="text.primary">All projects</Typography>
           </Breadcrumbs>
         </div>

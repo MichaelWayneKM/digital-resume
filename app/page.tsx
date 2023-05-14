@@ -9,7 +9,7 @@ import AppleWatchScroll from "@/components/AppleWatchScroll";
 import { motion, HTMLMotionProps } from "framer-motion";
 
 import { useTrail, animated } from "@react-spring/web";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGesture } from "react-use-gesture";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -32,6 +32,7 @@ import {
 import useSWR from "swr";
 import { fetcher } from "@/utils/datafetching";
 import Link from "next/link";
+import useScrollToAnchor from "./hooks/useScrollToAnchor";
 
 skills
   .sort((A, B) => B.skillRating - A.skillRating)
@@ -187,8 +188,8 @@ const ProjectTiles = () => {
 
   return (
     <div className="flex py-10 items-center overflow-auto space-x-3">
-      {data?.results.slice(0, 6).map((project) => (
-        <div className="max-w-md">
+      {data?.results.slice(0, 6).map((project, index) => (
+        <div key={index} className="max-w-md">
           <ProjectCard key={project.projectName} {...project} data={project} />
         </div>
       ))}
@@ -203,6 +204,13 @@ const ProjectTiles = () => {
 };
 
 export default function Home() {
+  const scrollToAnchor = useScrollToAnchor(42);
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    scrollToAnchor(hash);
+  }, [scrollToAnchor]);
+
   return (
     <AppleWatchScroll>
       <div className="relative overflow-hidden">
