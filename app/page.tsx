@@ -20,19 +20,18 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import StarRating from "@/components/StarRating";
 import { faArrowAltCircleRight } from "@fortawesome/free-regular-svg-icons";
+import { NextPage } from "next";
+import { skills } from "@/utils/cool";
+import { Button, Skeleton } from "@mui/material";
+import {
+  ProjectCard,
+  ProjectCardSkeleton,
+  ProjectFormCardProps,
+} from "@/components/ProjectCard";
 
-const skills = [
-  { name: "JavaScript", skillRating: 5, imgSrc: "", imgAlt: "" },
-  { name: "Python", skillRating: 4, imgSrc: "", imgAlt: "" },
-  { name: "React", skillRating: 5, imgSrc: "", imgAlt: "" },
-  { name: "TypeScript", skillRating: 6, imgSrc: "", imgAlt: "" },
-  { name: "Kotlin", skillRating: 2, imgSrc: "", imgAlt: "" },
-  { name: "C", skillRating: 4, imgSrc: "", imgAlt: "" },
-  { name: "Android", skillRating: 3, imgSrc: "", imgAlt: "" },
-  { name: "Arduino", skillRating: 2, imgSrc: "", imgAlt: "" },
-  { name: "Dart", skillRating: 5, imgSrc: "", imgAlt: "" },
-  { name: "Flutter", skillRating: 5, imgSrc: "", imgAlt: "" },
-];
+import useSWR from "swr";
+import { fetcher } from "@/utils/datafetching";
+import Link from "next/link";
 
 skills
   .sort((A, B) => B.skillRating - A.skillRating)
@@ -160,10 +159,45 @@ const HeadingTile = () => {
   return (
     <div className="h-full">
       <div className="text-white font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight mb-4">
-        <span className="block xl:inline">My </span>
+        <span className="block xl:inline text-slate-200 font-extralight">
+          Michael W.{" "}
+        </span>
         <span className="block xl:inline transform -skew-x-12">Digital </span>
         <span className="block xl:inline transform -skew-x-12">Portfolio </span>
       </div>
+    </div>
+  );
+};
+
+const ProjectTiles = () => {
+  const { data, error, isLoading } = useSWR<{
+    results: ProjectFormCardProps[];
+  }>("/projects", fetcher);
+
+  if (isLoading) {
+    return (
+      <div className="flex my-10 overflow-x-hidden space-x-3">
+        <ProjectCardSkeleton />
+        <ProjectCardSkeleton />
+        <ProjectCardSkeleton />
+        <ProjectCardSkeleton />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex py-10 items-center overflow-auto space-x-3">
+      {data?.results.slice(0, 6).map((project) => (
+        <div className="max-w-md">
+          <ProjectCard key={project.projectName} {...project} data={project} />
+        </div>
+      ))}
+
+      {data?.results.length && data?.results.length > 3 ? (
+        <Button className="mr-10" style={{ height: 50 }}>
+          see all
+        </Button>
+      ) : null}
     </div>
   );
 };
@@ -197,13 +231,13 @@ export default function Home() {
       </div>
 
       <div className="bg-white py-8 md:py-12 lg:py-16">
-        <div className="skill-title relative tracking-tight font-extrabold z-20 mx-0 sm:mx-6 lg:mx-60 flex text-center text-slate-900 text-2xl rounded-full px-3 py-1">
+        <div className="skill-title relative tracking-tight font-semibold z-20 mx-0 sm:mx-6 lg:mr-60 flex text-center text-slate-900 text-2xl rounded-full px-3 py-1">
           My skills and expertise
         </div>
 
         <div className="relative overflow-hidden flex  items-center align-middle min-w-full">
           <div className="absolute z-20 right-0 top-0 w-1/3 touch-none pointer-events-none bg-gradient-to-r from-transparent to-white h-full"></div>
-          <div className="relative tech_stack mx-0 sm:mx-6 lg:mx-60 z-10 touch-auto flex items-center overflow-scroll overflow-y-scroll flex-nowrap">
+          <div className="relative tech_stack px-0 sm:px-6 pr-60 z-10 touch-auto flex items-center overflow-scroll overflow-y-scroll flex-nowrap">
             {/* <div className="mr-4 sm:mr-6 lg:mr-80"></div> */}
 
             <SkillList />
@@ -263,81 +297,30 @@ export default function Home() {
         </div>
       </motion.div>
 
-      <div className="max-w-5xl mx-auto my-10 px-4 sm:px-6 lg:px-8 py-12 md:py-16 rounded-md bg-slate-50">
-        <div className="text-5xl text-slate-900">Project History</div>
+      <div
+        id="projects"
+        className="shadow-md max-w-5xl mx-auto my-10 px-4 sm:px-6 lg:px-8 py-12 md:py-16 rounded-md bg-slate-50"
+      >
+        <Link
+          href={{
+            pathname: `/projects`,
+          }}
+          className="text-5xl text-slate-900 hover:text-blue-500 transition-colors duration-300"
+        >
+          Project History
+        </Link>
+
+        <ProjectTiles />
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <img
-              src="https://via.placeholder.com/640x480.png?text=Project+1"
-              alt="Project 1"
-              className="w-full h-64 object-cover"
-            />
-            <div className="p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-                Project 1
-              </h2>
-              <p className="text-gray-600">A brief description of Project 1.</p>
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <img
-              src="https://via.placeholder.com/640x480.png?text=Project+2"
-              alt="Project 2"
-              className="w-full h-64 object-cover"
-            />
-            <div className="p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-                Project 2
-              </h2>
-              <p className="text-gray-600">A brief description of Project 2.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <img
-              src="https://via.placeholder.com/640x480.png?text=Project+3"
-              alt="Project 3"
-              className="w-full h-64 object-cover"
-            />
-            <div className="p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-                Project 3
-              </h2>
-              <p className="text-gray-600">A brief description of Project 3.</p>
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <img
-              src="https://via.placeholder.com/640x480.png?text=Project+4"
-              alt="Project 4"
-              className="w-full h-64 object-cover"
-            />
-
-            <div className="p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-                Project 4
-              </h2>
-              <p className="text-gray-600">A brief description of Project 4.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div className="mb-20 shadow-md bg-white max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-800 mb-4">Contact Me</h2>
           <p className="text-gray-600">
             Let's get in touch and talk about your next project.
           </p>
           <a
-            href="#"
+            href="mailto:mwaynenjogu@gmail.com"
             className="mt-8 inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-8 rounded-lg shadow-lg"
           >
             Contact Me

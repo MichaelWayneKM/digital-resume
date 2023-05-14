@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import "./applewatch.min.css";
 
-export const AppleWatchScroll = ({ children }: {children: React.ReactElement[] }) => {
+export const AppleWatchScroll = ({ children }: {children: React.ReactElement[] | React.ReactElement }) => {
   useEffect(() => {
     const border = document.querySelector('.apple-watch-border') as HTMLDivElement;
     const content = document.querySelector('.apple-watch-content')!;
@@ -21,7 +21,7 @@ export const AppleWatchScroll = ({ children }: {children: React.ReactElement[] }
   }, []);
 
   return (
-    <div className="apple-watch bg-gray-100 min-h-screen">
+    <div className="apple-watch bg-[#f5f8ff] min-h-screen">
       <div className="apple-watch-border">
         <div className="apple-watch-content">
           {children}
