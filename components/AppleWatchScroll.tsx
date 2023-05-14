@@ -21,7 +21,7 @@ export const AppleWatchScroll = ({ children }: {children: React.ReactElement[] |
   }, []);
 
   return (
-    <div className="apple-watch bg-[#f5f8ff] min-h-screen pb-10">
+    <div className="apple-watch bg-[#f5f8ff] min-h-screen pb-6">
       <div className="apple-watch-border">
         <div className="apple-watch-content">
           {children}
