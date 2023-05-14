@@ -13,7 +13,7 @@ export interface ProjectFormCardProps extends ProjectFormProps {
 
 export const ProjectCardSkeleton = () => {
   return (
-    <div className="bg-white min-w-[350px] shadow-sm rounded-md overflow-hidden filter grayscale hover:scale-[10 px] hover:shadow-2xl hover:grayscale-0 border-2 transition-all duration-300">
+    <div className="bg-white min-w-[250px] max-w-[350px] shadow-sm rounded-md overflow-hidden filter grayscale hover:scale-[10 px] hover:shadow-2xl hover:grayscale-0 border-2 transition-all duration-300">
       <div className="p-4">
         <Skeleton variant="rectangular" height={200} />
         <Skeleton variant="text" width="50%" height={30} />
