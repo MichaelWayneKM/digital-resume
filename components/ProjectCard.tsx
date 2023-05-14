@@ -45,7 +45,7 @@ export const ProjectCard = ({
 
   return (
     <div
-      className={`bg-white shadow-sm rounded-md overflow-hidden filter grayscale hover:scale-[10 px] hover:shadow-2xl hover:grayscale-0 ${
+      className={`bg-white min-w-[250px] max-w-[350px] shadow-sm rounded-md overflow-hidden filter grayscale hover:scale-[10 px] hover:shadow-2xl hover:grayscale-0 ${
         isInProgress ? "hover:border-blue-200" : "hover:border-green-200"
       } border-2 transition-all duration-300`}
     >

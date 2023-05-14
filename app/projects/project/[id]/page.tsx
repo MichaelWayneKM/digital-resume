@@ -111,7 +111,7 @@ const ProjectPage = () => {
               {staleData.githubUrl ? (
                 <div className="flex items-center">
                   <a
-                    href={`https://${staleData.githubUrl}`}
+                    href={`${staleData.githubUrl}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mr-4 py-5 text-slate-300 font-extrabold"
@@ -221,7 +221,7 @@ const ProjectPage = () => {
         </main>
         <div>
           {selectedScreenshotIndex != null && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-filter backdrop-blur-lg transition-opacity delay-1000 duration-1000 ease-in-out">
+            <div className="fixed inset-0 z-50 overflow-y-auto pb-5 flex items-center justify-center backdrop-filter backdrop-blur-lg transition-opacity delay-1000 duration-1000 ease-in-out">
               <div className="absolute inset-0 bg-black opacity-75"></div>
               <div className="absolute text-white space-y-10 flex flex-col items-center">
                 {selectedScreenshotIndex !== 0 && (

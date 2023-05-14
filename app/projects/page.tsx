@@ -68,7 +68,7 @@ const ProjectsPage = async () => {
 
   return (
     <AppleWatchScroll>
-      <div className="bg-gray-100 pb-12">
+      <div className="bg-gray-100 pb-12 mb-10">
         <PageHeader />
         <div className="mx-12 my-8">
           <Breadcrumbs aria-label="breadcrumb">
