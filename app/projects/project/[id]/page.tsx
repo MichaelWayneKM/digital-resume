@@ -98,7 +98,7 @@ const ProjectPage = () => {
               <div className="flex">
                 <div className="flex items-center">
                   <Image
-                    src={staleData?.projectIcon?.base64 ?? "/favicon.ico"}
+                    src={staleData?.projectIcon?.url ?? "/favicon.ico"}
                     alt="Logo"
                     width={40}
                     height={40}
@@ -150,7 +150,7 @@ const ProjectPage = () => {
             <div className="flex flex-col items-center md:flex-row justify-between">
               <div className="md:w-1/2 mb-8 mr-0 md:mr-10 lg:mr-10 md:mb-0 max-h-60 md:max-h-80 lg:max-h-96 overflow-clip flex items-center rounded-full">
                 <Image
-                  src={staleData.projectCover.base64}
+                  src={staleData.projectCover.url}
                   alt={staleData.projectCover.name}
                   width={800}
                   height={500}
@@ -186,20 +186,20 @@ const ProjectPage = () => {
               </div>
             </div>
           </div>
-          <div className="mx-auto sm:px-6 lg:px-8 py-12">
-            <div className="text-slate-950 px-4 font-extrabold text-4xl lg:text-6xl mt-10">
+          <div className="mx-auto py-12">
+            <div className="text-slate-950 sm:px-6 lg:px-8 px-4 font-extrabold text-4xl lg:text-6xl mt-10">
               Screenshots
             </div>
 
-            <div className="flex px-4 overflow-x-auto">
+            <div className="flex sm:px-6 lg:px-8 px-4 overflow-x-auto scrollbar-hide">
               {staleData.screenshots.map((screenshot, index) => (
                 <div
                   key={screenshot.name}
                   onClick={() => handleOpenPreview(index)}
-                  className="relative flex-shrink-0 w-64 h-48 mx-4 my-8 rounded-lg shadow-lg cursor-pointer"
+                  className="relative overflow-hidden flex-shrink-0 w-64 h-48 mx-4 my-8 rounded-lg shadow-lg cursor-pointer"
                 >
                   <Image
-                    src={screenshot.base64}
+                    src={screenshot.url}
                     alt={screenshot.name}
                     fill={true}
                     style={{
@@ -221,9 +221,9 @@ const ProjectPage = () => {
         </main>
         <div>
           {selectedScreenshotIndex != null && (
-            <div className="fixed inset-0 z-50 overflow-y-auto pb-5 flex items-center justify-center backdrop-filter backdrop-blur-lg transition-opacity delay-1000 duration-1000 ease-in-out">
+            <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-filter backdrop-blur-lg transition-opacity delay-1000 duration-1000 ease-in-out">
               <div className="absolute inset-0 bg-black opacity-75"></div>
-              <div className="absolute text-white space-y-10 flex flex-col items-center">
+              <div className="absolute text-white space-y-10 max-h-full py-5 overflow-y-auto flex flex-col items-center">
                 {selectedScreenshotIndex !== 0 && (
                   <button
                     className="text-white my-2 py-2 px-4 rounded-full bg-gray-900 hover:bg-gray-800 transition-colors duration-300"
@@ -233,11 +233,11 @@ const ProjectPage = () => {
                   </button>
                 )}
                 <Image
-                  src={staleData.screenshots[selectedScreenshotIndex].base64}
+                  src={staleData.screenshots[selectedScreenshotIndex].url}
                   alt={staleData.screenshots[selectedScreenshotIndex].name}
                   width={1200}
                   height={400}
-                  className="object-contain md:object-scale-down lg:max-w-screen-xl md:lg:max-w-screen-md sm:lg:max-w-screen-sm max-h-[500px]"
+                  className="object-contain active:scale-150 md:object-scale-down lg:max-w-screen-xl md:lg:max-w-screen-md sm:lg:max-w-screen-sm max-h-[500px]"
                 />
                 {selectedScreenshotIndex < staleData.screenshots.length - 1 && (
                   <button

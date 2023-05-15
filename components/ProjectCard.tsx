@@ -45,7 +45,7 @@ export const ProjectCard = ({
 
   return (
     <div
-      className={`bg-white min-w-[330px] shadow-sm rounded-md overflow-hidden filter grayscale hover:scale-[10 px] hover:shadow-2xl hover:grayscale-0 ${
+      className={`bg-white min-w-[330px] shadow-sm rounded-md overflow-hidden filter grayscale hover:scale-[10 px] hover:shadow-xl hover:grayscale-0 ${
         isInProgress ? "hover:border-blue-200" : "hover:border-green-200"
       } border-2 transition-all duration-300`}
     >
@@ -97,7 +97,7 @@ export const ProjectCard = ({
               className={`w-8 h-8 rounded-full ${
                 isInProgress ? "border-blue-500" : "border-green-400"
               } border-2`}
-              src={projectIcon.base64}
+              src={projectIcon.url}
               alt={projectIcon.name}
             />
           )}

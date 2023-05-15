@@ -187,9 +187,9 @@ const ProjectTiles = () => {
   }
 
   return (
-    <div className="flex py-10 items-center overflow-auto space-x-3">
+    <div className="flex py-10 px-4 sm:px-6 items-center overflow-auto space-x-3 scrollbar-hide">
       {data?.results.slice(0, 6).map((project, index) => (
-        <div key={index} className="max-w-md">
+        <div className="max-w-xs">
           <ProjectCard key={project.projectName} {...project} data={project} />
         </div>
       ))}
@@ -307,16 +307,23 @@ export default function Home() {
 
       <div
         id="projects"
-        className="shadow-md max-w-5xl mx-auto my-10 px-4 sm:px-6 lg:px-8 py-12 md:py-16 rounded-md bg-slate-50"
+        className="shadow-md max-w-5xl mx-auto my-10 lg:px-8 py-12 md:py-16 rounded-md bg-slate-50"
       >
-        <Link
-          href={{
-            pathname: `/projects`,
-          }}
-          className="text-5xl text-slate-900 hover:text-blue-500 transition-colors duration-300"
-        >
-          Project History
-        </Link>
+        <div className="flex items-center justify-between flex-nowrap px-4 sm:px-6">
+          <Link
+            href={{
+              pathname: `/projects`,
+            }}
+            className="text-5xl text-slate-900 hover:text-blue-500 transition-colors duration-300"
+          >
+            Project History
+          </Link>
+          <FontAwesomeIcon
+            className="hover:text-blue-700"
+            icon={faArrowRight}
+            size="2x"
+          />
+        </div>
 
         <ProjectTiles />
       </div>

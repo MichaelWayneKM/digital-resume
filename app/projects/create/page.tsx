@@ -14,8 +14,9 @@ import { Spinner } from "@/components/Spinner";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { skills } from "@/utils/cool";
+import { uploadImageToFirebase } from "@/utils/firebase";
 
-type Image = { name: string; path: string; base64: string };
+type Image = { name: string; path: string; url: string };
 
 export interface ProjectFormProps {
   projectName: string;
@@ -79,23 +80,27 @@ const FormInput = ({
                 accept="image/*"
                 required={required}
                 name={name}
-                onChange={(event: any) => {
+                onChange={async (event: any) => {
                   const file = event.target.files[0];
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    setFieldValue(name, {
-                      file: file,
-                      preview: reader.result as string,
-                      base64: reader.result || "", //?.toString().split(",")[1] || "",
-                    });
-                  };
-                  if (file) {
-                    reader.readAsDataURL(file);
-                  }
+                  //const reader = new FileReader();
+                  // reader.onloadend = () => {
+                  //   setFieldValue(name, {
+                  //     file: file,
+                  //     preview: reader.result as string,
+                  //     url: reader.result || "", //?.toString().split(",")[1] || "",
+                  //   });
+                  // };
+                  // if (file) {
+                  //   reader.readAsDataURL(file);
+                  // }
+
+                  const url = await uploadImageToFirebase(file);
+
+                  setFieldValue(name, {});
                 }}
                 className="block w-full px-4 py-2 rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-800"
               />
-              {value?.base64 ?? <div>{value?.base64}</div>}
+              {value?.url ?? <div>{value?.url}</div>}
             </div>
           );
         }}
@@ -149,34 +154,63 @@ const ImageUpload = ({
     shouldValidate?: boolean | undefined
   ) => void;
 }) => {
+  const [loadingImageUri, setLoadingImageUri] = useState(false);
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: { "image/*": ["*"] },
-    onDrop: (acceptedFiles: File[]) => {
+    onDrop: async (acceptedFiles: File[]) => {
       // Map each file to a promise that resolves to an object containing the file name and base64 data
-      const promises = acceptedFiles.map(
-        (file) =>
-          new Promise<Image>((resolve, reject) => {
-            const reader = new FileReader();
+      // const promises = acceptedFiles.map(
+      //   (file) =>
+      //     new Promise<Image>((resolve, reject) => {
+      //       const reader = new FileReader();
 
-            reader.onload = (event) => {
-              if (!event.target) {
-                reject(null);
-                return;
-              }
+      //       reader.onload = (event) => {
+      //         if (!event.target) {
+      //           reject(null);
+      //           return;
+      //         }
 
-              const base64 = event.target.result as string;
-              resolve({ name: file.name, path: (file as any).path, base64 });
+      //         const base64 = event.target.result as string;
+      //         resolve({ name: file.name, path: (file as any).path, base64 });
+      //       };
+
+      //       reader.readAsDataURL(file);
+      //     })
+      // );
+
+      // // Once all promises are resolved, update the state with the image data
+      // Promise.all(promises).then((images) => {
+      //   setImages((prevImages: Image[]) => [...prevImages, ...images]);
+      //   setField("screenshots", images);
+      // });
+
+      const filesData: Image[] = [];
+
+      setLoadingImageUri(true);
+      try {
+        for (const file of acceptedFiles) {
+          const url = await uploadImageToFirebase(file);
+
+          if (url) {
+            const fileData = {
+              name: file.name,
+              path: (file as any).path,
+              url: url,
             };
 
-            reader.readAsDataURL(file);
-          })
-      );
+            filesData.push(fileData);
+          }
+        }
 
-      // Once all promises are resolved, update the state with the image data
-      Promise.all(promises).then((images) => {
-        setImages((prevImages: Image[]) => [...prevImages, ...images]);
-        setField("screenshots", images);
-      });
+        setLoadingImageUri(false);
+      } catch (err) {
+        setLoadingImageUri(false);
+      }
+
+      // File data with name, path, and URL is available in the `filesData` array
+      setImages((prevImages: Image[]) => [...prevImages, ...filesData]);
+      setField("screenshots", filesData);
     },
   });
 
@@ -195,9 +229,10 @@ const ImageUpload = ({
         </p>
       </div>
       <ul className="mt-4 text-slate-600">
+        {loadingImageUri ? <Spinner /> : null}
         {images.map((image, index) => (
           <li key={index}>
-            {image.name} - {image.base64.substr(0, 20)}...
+            {image.name} - {image.url.substring(0, 40)}...
           </li>
         ))}
       </ul>
@@ -227,7 +262,7 @@ const ProjectForm = () => {
       endDate: "",
     },
     projectCover: {
-      base64: "",
+      url: "",
       name: "",
       path: "",
     },
@@ -241,7 +276,6 @@ const ProjectForm = () => {
 
     //console.log(values);
 
-    
     try {
       const response = await fetch("/api/projects", {
         method: "POST",
@@ -251,11 +285,13 @@ const ProjectForm = () => {
       const responseData = await response.json();
       console.log(responseData, response.status);
 
-
-      if (responseData["error"] && responseData["error"].includes("duplicate")) {
+      if (
+        responseData["error"] &&
+        responseData["error"].includes("duplicate")
+      ) {
         setSuccess(false);
         setLoading(false);
-        return alert("This project already exists in server")
+        return alert("This project already exists in server");
       }
 
       if (responseData["_doc"]["_id"]) {
@@ -267,10 +303,8 @@ const ProjectForm = () => {
       } else {
         setSuccess(false);
         setLoading(false);
-        alert("something went wrong")
+        alert("something went wrong");
       }
-
-      
     } catch (err: any) {
       setLoading(false);
       alert(err.toString());
@@ -401,7 +435,7 @@ const ProjectForm = () => {
               )}
             </Formik>
 
-            {(loading || isSuccess) ? (
+            {loading || isSuccess ? (
               <div className="absolute flex flex-col items-center place-items-center justify-center h-full w-full top-0 left-0 backdrop-blur-sm z-20">
                 {loading && !isSuccess ? (
                   <Spinner />
