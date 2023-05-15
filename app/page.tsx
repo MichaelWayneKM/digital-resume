@@ -99,6 +99,7 @@ const SkillList = () => {
                 src={skills[index].imgSrc}
                 alt={skills[index].imgAlt}
                 height={80}
+                unoptimized={false}
                 loading="lazy"
                 width={80}
               ></Image>
@@ -189,7 +190,7 @@ const ProjectTiles = () => {
   return (
     <div className="flex py-10 px-4 sm:px-6 items-center overflow-auto space-x-3 scrollbar-hide">
       {data?.results.slice(0, 6).map((project, index) => (
-        <div key={index} className="max-w-xs">
+        <div key={index} className="max-w-md">
           <ProjectCard key={project.projectName} {...project} data={project} />
         </div>
       ))}
@@ -224,6 +225,7 @@ export default function Home() {
             alt="my mobile ui sprite"
             height={800}
             width={800}
+            unoptimized={false}
             style={{
               opacity: 0.3,
               minHeight: 420,
@@ -307,7 +309,7 @@ export default function Home() {
 
       <div
         id="projects"
-        className="shadow-md max-w-5xl mx-auto my-10 lg:px-8 py-12 md:py-16 rounded-md bg-slate-50"
+        className="shadow-md max-w-5xl lg:mx-auto mx-2 my-10 lg:px-8 py-12 md:py-16 rounded-md bg-slate-50"
       >
         <div className="flex items-center justify-between flex-nowrap px-4 sm:px-6">
           <Link
@@ -328,7 +330,7 @@ export default function Home() {
         <ProjectTiles />
       </div>
 
-      <div className="mb-20 shadow-md bg-white max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div className="mb-20 lg:mx-auto mx-2 shadow-md bg-white max-w-5xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-800 mb-4">Contact Me</h2>
           <p className="text-gray-600">

@@ -29,6 +29,32 @@ export interface ServerProjectFormProps extends ProjectFormProps {
   results: ProjectFormProps;
 }
 
+const ProjectCover = ({ src, alt }: {src: string, alt: string}) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="relative">
+      {isLoading && (
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse"></div>
+      )}
+      <Image
+        src={src}
+        alt={alt}
+        width={800}
+        height={500}
+        priority
+        loading="eager"
+        className="object-cover object-center"
+        onLoad={handleImageLoad}
+      />
+    </div>
+  );
+};
+
 const ProjectPage = () => {
   const pathname = usePathname();
   const id = pathname.split("==")[1];
@@ -149,13 +175,7 @@ const ProjectPage = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="flex flex-col items-center md:flex-row justify-between">
               <div className="md:w-1/2 mb-8 mr-0 md:mr-10 lg:mr-10 md:mb-0 max-h-60 md:max-h-80 lg:max-h-96 overflow-clip flex items-center rounded-full">
-                <Image
-                  src={staleData.projectCover.url}
-                  alt={staleData.projectCover.name}
-                  width={800}
-                  height={500}
-                  className="object-cover object-center"
-                />
+                <ProjectCover src={staleData.projectCover.url} alt={staleData.projectCover.name}/>
               </div>
               <div className="md:w-1/2">
                 <h1 className="text-4xl font-bold mb-4 text-slate-950">

@@ -5,7 +5,8 @@ const nextConfig = {
     serverComponentsExternalPackages: ["mongoose"],
   },
   images: {
-    domains: ['picsum.photos'],
+    domains: ['picsum.photos', 'firebasestorage.googleapis.com'],
+    unoptimized: true,
   },
   webpack(config) {
     config.experiments = { ...config.experiments, topLevelAwait: true }
