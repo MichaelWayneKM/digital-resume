@@ -189,7 +189,7 @@ const ProjectTiles = () => {
   return (
     <div className="flex py-10 px-4 sm:px-6 items-center overflow-auto space-x-3 scrollbar-hide">
       {data?.results.slice(0, 6).map((project, index) => (
-        <div className="max-w-xs">
+        <div key={index} className="max-w-xs">
           <ProjectCard key={project.projectName} {...project} data={project} />
         </div>
       ))}
