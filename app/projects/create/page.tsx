@@ -96,7 +96,13 @@ const FormInput = ({
 
                   const url = await uploadImageToFirebase(file);
 
-                  setFieldValue(name, {});
+                  const fileData = {
+                    name: file.name,
+                    path: (file as any).path,
+                    url: url,
+                  };
+
+                  setFieldValue(name, fileData);
                 }}
                 className="block w-full px-4 py-2 rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-800"
               />
